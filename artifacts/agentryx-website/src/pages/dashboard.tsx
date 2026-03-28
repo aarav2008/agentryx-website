@@ -5,6 +5,7 @@ import {
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useTheme } from "@/contexts/theme-context";
 import {
   Activity, TrendingUp, TrendingDown, Zap, Shield, BarChart3,
   Users, DollarSign, AlertCircle, CheckCircle, Clock, RefreshCw,
@@ -94,13 +95,18 @@ const CHART_COLORS = {
   glide: "#6366f1", atlas: "#f59e0b", vertex: "#06b6d4",
 };
 
-const axisProps = {
-  tick: { fill: "rgba(255,255,255,0.25)", fontSize: 10, fontFamily: "Menlo, monospace" },
-  axisLine: { stroke: "rgba(255,255,255,0.06)" },
-  tickLine: false as const,
-};
-
-const gridProps = { stroke: "rgba(255,255,255,0.04)", strokeDasharray: "0" };
+function useChartTheme() {
+  const { theme } = useTheme();
+  const light = theme === "frost";
+  return {
+    axisProps: {
+      tick: { fill: light ? "rgba(0,0,0,0.38)" : "rgba(255,255,255,0.25)", fontSize: 10, fontFamily: "Menlo, monospace" },
+      axisLine: { stroke: light ? "rgba(0,0,0,0.10)" : "rgba(255,255,255,0.06)" },
+      tickLine: false as const,
+    },
+    gridProps: { stroke: light ? "rgba(0,0,0,0.07)" : "rgba(255,255,255,0.04)", strokeDasharray: "0" },
+  };
+}
 
 function ChartTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) return null;
@@ -183,6 +189,7 @@ function SectionCard({ title, subtitle, children, className }: { title: string; 
 /* ══════════════════════ DASHBOARD PAGE ══════════════════════ */
 
 export default function Dashboard() {
+  const { axisProps, gridProps } = useChartTheme();
   const [timeRange, setTimeRange] = useState<"7d" | "30d">("30d");
   const displayed = timeRange === "7d" ? DAILY_TASKS.slice(-7) : DAILY_TASKS;
   const todayTasks = DAILY_TASKS[DAILY_TASKS.length - 1].total;

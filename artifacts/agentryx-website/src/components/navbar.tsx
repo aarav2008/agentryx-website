@@ -1,28 +1,20 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useState, useEffect } from "react";
-import { Menu, X, LayoutDashboard, ChevronDown } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link, useLocation } from "wouter";
 
 const PAGE_LINKS = [
   { label: "Dashboard", href: "/dashboard", live: true },
-  { label: "Services", href: "/services" },
-  { label: "Work", href: "/work" },
-  { label: "About", href: "/about" },
-];
-
-// On home page, we also support anchor links
-const HOME_ANCHORS = [
-  { label: "Services", href: "#services" },
-  { label: "Work", href: "#work" },
-  { label: "About", href: "#about" },
+  { label: "Services",  href: "/services" },
+  { label: "Work",      href: "/work" },
+  { label: "About",     href: "/about" },
 ];
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [location] = useLocation();
-  const isHome = location === "/";
   const { scrollYProgress } = useScroll();
   const progressWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
@@ -33,14 +25,6 @@ export function Navbar() {
   }, []);
 
   useEffect(() => { setOpen(false); }, [location]);
-
-  const scrollToAnchor = (href: string) => (e: React.MouseEvent) => {
-    e.preventDefault();
-    setOpen(false);
-    if (isHome) {
-      document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   return (
     <motion.header
@@ -55,7 +39,7 @@ export function Navbar() {
       )}>
         {/* Scroll progress bar */}
         <motion.div style={{ width: progressWidth }}
-          className="absolute bottom-0 left-0 h-[1px] bg-gradient-to-r from-violet-500/0 via-violet-400/60 to-violet-500/0" />
+          className="absolute bottom-0 left-0 h-[1px] bg-gradient-to-r from-primary/0 via-primary/60 to-primary/0" />
 
         <div className="flex items-center justify-between px-5 py-3">
           {/* Logo */}
@@ -65,7 +49,7 @@ export function Navbar() {
                 <path d="m12 3-8 4.5 8 4.5 8-4.5M12 12l8-4.5M12 12v9m-8-4.5v-9l8 4.5" />
               </svg>
             </div>
-            <span className="text-white font-black text-lg tracking-tight">Agentryx</span>
+            <span className="font-black text-lg tracking-tight text-foreground">Agentryx</span>
           </Link>
 
           {/* Desktop links */}
@@ -77,15 +61,14 @@ export function Navbar() {
                   className={cn(
                     "relative px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200 flex items-center gap-1.5",
                     isActive
-                      ? "text-white bg-white/[0.08]"
-                      : "text-white/50 hover:text-white hover:bg-white/[0.06]"
+                      ? "text-foreground bg-foreground/[0.07]"
+                      : "text-muted-foreground hover:text-foreground hover:bg-foreground/[0.05]"
                   )}>
-                  {l.live && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 status-blink flex-shrink-0" />
-                  )}
+                  {l.live && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 status-blink flex-shrink-0" />}
                   {l.label}
                   {isActive && (
-                    <motion.div layoutId="nav-active" className="absolute bottom-0 inset-x-2 h-[1px] bg-gradient-to-r from-violet-500/0 via-violet-400/50 to-violet-500/0" />
+                    <motion.div layoutId="nav-active"
+                      className="absolute bottom-0 inset-x-2 h-[1px] bg-gradient-to-r from-primary/0 via-primary/50 to-primary/0" />
                   )}
                 </Link>
               );
@@ -94,13 +77,13 @@ export function Navbar() {
 
           {/* CTA */}
           <a href="mailto:hello@agentryx.com"
-            className="hidden md:inline-flex items-center px-5 py-2.5 rounded-xl glass border border-white/10 text-sm font-semibold text-white hover:border-white/20 hover:bg-white/[0.07] transition-all duration-300">
+            className="hidden md:inline-flex items-center px-5 py-2.5 rounded-xl glass border border-border text-sm font-semibold text-foreground hover:border-primary/30 hover:bg-foreground/[0.05] transition-all duration-300">
             Book a Consultation
           </a>
 
           {/* Mobile toggle */}
           <button
-            className="md:hidden p-2 rounded-xl text-white/60 hover:text-white hover:bg-white/[0.06] transition-colors"
+            className="md:hidden p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-foreground/[0.06] transition-colors"
             onClick={() => setOpen(!open)}
             aria-label="Toggle menu"
           >
@@ -123,7 +106,9 @@ export function Navbar() {
               <Link key={l.label} href={l.href}
                 className={cn(
                   "flex items-center gap-2 px-4 py-3 text-sm font-medium rounded-xl transition-colors",
-                  isActive ? "bg-white/[0.08] text-white" : "text-white/60 hover:text-white hover:bg-white/[0.06]"
+                  isActive
+                    ? "bg-foreground/[0.07] text-foreground"
+                    : "text-muted-foreground hover:text-foreground hover:bg-foreground/[0.05]"
                 )}>
                 {l.live && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 status-blink" />}
                 {l.label}
@@ -131,7 +116,7 @@ export function Navbar() {
             );
           })}
           <a href="mailto:hello@agentryx.com"
-            className="mt-1 px-4 py-3 rounded-xl text-center text-sm font-semibold text-white glass hover:bg-white/[0.07] transition-colors">
+            className="mt-1 px-4 py-3 rounded-xl text-center text-sm font-semibold text-foreground glass border border-border hover:bg-foreground/[0.05] transition-colors">
             Book a Consultation
           </a>
         </motion.div>
