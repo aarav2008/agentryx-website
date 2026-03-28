@@ -1,0 +1,8 @@
+packages:
+  "framer-motion": "Smooth entrance animations, scroll-triggered effects, and micro-interactions"
+  "clsx": "Utility for constructing className strings conditionally"
+  "tailwind-merge": "Utility to merge tailwind classes without style conflicts"
+
+notes:
+  - Pure frontend marketing site, no backend API required.
+  - Relying heavily on CSS custom properties for cursor-reactive background.
