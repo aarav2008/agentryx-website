@@ -493,9 +493,46 @@
   .marquee {
     animation: marquee-left 28s linear infinite;
   }
-  .marquee:hover {
+  .marquee-reverse {
+    animation: marquee-left 28s linear infinite reverse;
+  }
+  .marquee:hover,
+  .marquee-reverse:hover {
     animation-play-state: paused;
   }
+
+  /* Ticker */
+  .ticker-anim {
+    animation: marquee-left 55s linear infinite;
+  }
+
+  /* Dot grid background */
+  .bg-grid {
+    background-image: radial-gradient(circle, rgba(139,92,246,0.08) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+
+  /* Status dots */
+  @keyframes status-blink {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.4; transform: scale(0.75); }
+  }
+  .status-blink { animation: status-blink 1.8s ease-in-out infinite; }
+
+  /* Spin slow */
+  @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .spin-slow { animation: spin-slow 8s linear infinite; }
+
+  /* Neon glow border pulse */
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 12px rgba(139,92,246,0.2), 0 0 0 1px rgba(139,92,246,0.15); }
+    50%       { box-shadow: 0 0 28px rgba(139,92,246,0.45), 0 0 0 1px rgba(139,92,246,0.35); }
+  }
+  .glow-pulse { animation: glow-pulse 3s ease-in-out infinite; }
+
+  /* Uptime bar fill animation */
+  @keyframes bar-fill { from { width: 0; } to { width: var(--bar-w, 100%); } }
+  .bar-fill { animation: bar-fill 1.4s cubic-bezier(0.4,0,0.2,1) forwards; }
 
   /* Float */
   .float-1 { animation: float 6s ease-in-out infinite; }
